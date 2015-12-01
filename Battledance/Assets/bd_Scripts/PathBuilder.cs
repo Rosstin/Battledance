@@ -47,7 +47,7 @@ public class PathBuilder : MonoBehaviour {
 
 	public void DestroyPath(){
 		Debug.Log ("Destroy path.");
-
+		player.GetComponent<CharacterPositionController> ().FadeOut();
 		path = new List<Vector3>();
 	}
 
