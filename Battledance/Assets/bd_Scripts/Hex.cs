@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-struct Point
+public struct Point
 {
 	public Point(double x, double y)
 	{
@@ -16,7 +16,7 @@ struct Point
 }
 
 // the hex itself
-struct Hex
+public struct Hex
 {
 	public Hex(int q, int r, int s)
 	{
@@ -32,7 +32,7 @@ struct Hex
 	{
 		return new Hex(a.q + b.q, a.r + b.r, a.s + b.s);
 	}
-	
+
 	
 	static public Hex Subtract(Hex a, Hex b)
 	{
@@ -79,7 +79,7 @@ struct Hex
 
 }
 
-struct OffsetCoord
+public struct OffsetCoord
 {
 	public OffsetCoord(int col, int row)
 	{

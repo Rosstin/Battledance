@@ -23,14 +23,15 @@ public class MakeBattlefield : MonoBehaviour {
 
 		for (int i = -Constants.GRID_RADIUS; i < Constants.GRID_RADIUS; i++) {
 			for (int j = -Constants.GRID_RADIUS; j < Constants.GRID_RADIUS; j++) {
-				Hex givenHex = new Hex (i,j,0);
+				Hex givenHex = OffsetCoord.QoffsetToCube(0, new OffsetCoord(i,j));
 				Point screenPoint = HexLayout.HexToPixel (gameGrid, givenHex);
 				//Debug.Log ("given hex: " + givenHex.q + ", " + givenHex.r + ", " + givenHex.s + "... " + "given point for hex: "+screenPoint.x + ", " + screenPoint.y );
 				// now draw these hexes
 
 				battlespace.transform.position = new Vector3((float)screenPoint.x, 0.0f, (float)screenPoint.y);
 
-				Instantiate (battlespace);
+				GameObject newBattlespace = Instantiate (battlespace);
+				newBattlespace.GetComponent<BattlespaceController>().hex = givenHex;
 
 				// put the prisms in an array
 				battlefieldController.battlespaceControllerList.Add (battlespace);

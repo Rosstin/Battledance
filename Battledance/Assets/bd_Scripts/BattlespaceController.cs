@@ -4,7 +4,9 @@ using System.Collections;
 public class BattlespaceController : MonoBehaviour {
 
 	public GameObject pathBuilder;
-	PathBuilder pathBuilderScript;
+	public PathBuilder pathBuilderScript;
+
+	public Hex hex;
 
 	// Use this for initialization
 	void Start () {
@@ -31,14 +33,14 @@ public class BattlespaceController : MonoBehaviour {
 
 	// PATH RELATED CODE
 	void OnMouseDown() {
-		pathBuilderScript.AddPathPoint (this.transform.position);
+		pathBuilderScript.AddPathPoint (this.gameObject);
 		Debug.Log ("You clicked me. I'm the start of a path... I'm " + this.transform.position.x + ", " + this.transform.position.y);
 	}
 
 	void OnMouseEnter() {
 		//Debug.Log ("OnMouseEnter... I'm " +  this.transform.position.x + ", " + this.transform.position.y);
 		if (Input.GetMouseButton(0)) {
-			pathBuilderScript.AddPathPoint (this.transform.position);
+			pathBuilderScript.AddPathPoint (this.gameObject);
 			Debug.Log ("you entered me and you're clicking... I'm " + this.transform.position.x + ", " + this.transform.position.y);
 		}
 	}
