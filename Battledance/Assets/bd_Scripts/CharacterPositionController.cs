@@ -5,25 +5,37 @@ public class CharacterPositionController : MonoBehaviour {
 
 	SpriteRenderer mySpriteRenderer;
 
-	bool fadingOut;
-	bool fadingIn;
-	bool fading;
+	//bool fadingOut;
+	//bool fadingIn;
+	//bool fading;
 
 	// TODO: use enums instead?
 	const int ANIM_STATE_FADING_OUT = 1;
-	const int ANIM_STATE_FADING_IN = 2;
+	const int ANIM_STATE_FULLY_INVISIBLE = 2;
+	const int ANIM_STATE_FADING_IN = 3;
+	const int ANIM_STATE_FULLY_VISIBLE = 4;
 
-	// TODO: ACTION QUEUE
+	// TODO: ACTION QUEUE?
 	//  pop and push?
 
-	int animationState;
+	int teleportingState;
 
+
+	const int TRANSITION_STATE_NEUTRAL = 0;
+	const int TRANSITION_STATE_TELEPORTING = 1;
+	// moving?
+	
+	Vector3 positionToTeleportTo; //todo should be a hex?
+
+	int transitionState;
 
 	/*
 	 * First, fade the player out. Then, fade them in at the new position.
 	 **/
-	void TeleportPlayerToThisPosition(){
-		FadeOut ();
+	public void TeleportPlayerToThisPosition(Vector3 teleportPosition){
+		positionToTeleportTo = teleportPosition;
+		transitionState = TRANSITION_STATE_TELEPORTING;
+		teleportingState = ANIM_STATE_FADING_OUT;
 	}
 
 	/* 
@@ -35,16 +47,14 @@ public class CharacterPositionController : MonoBehaviour {
 	 * Fade self out
 	 **/
 	public void FadeOut () {
-		fading = true;
-		fadingOut = true;
+		teleportingState = ANIM_STATE_FADING_OUT;
 	}
 
 	/*
 	 * Fade self in
 	 **/
 	public void FadeIn () {
-		fading = true;
-		fadingIn = true;
+		teleportingState = ANIM_STATE_FADING_IN;
 	}
 
 	void FixedUpdate() {
@@ -52,12 +62,34 @@ public class CharacterPositionController : MonoBehaviour {
 		// check state
 		// based on state, perform a step
 
-		if (fading == true && fadingOut == true && mySpriteRenderer.color.a > 0) {
-			FadeOutStep();
+		if (transitionState == TRANSITION_STATE_TELEPORTING) { //this should be very fast
+
+
+			if (teleportingState == ANIM_STATE_FADING_OUT) {
+				if (mySpriteRenderer.color.a > 0) {
+					FadeOutStep ();
+				} else {
+					teleportingState = ANIM_STATE_FULLY_INVISIBLE;
+				}
+			}
+
+			if(teleportingState == ANIM_STATE_FULLY_INVISIBLE){
+				this.transform.position = positionToTeleportTo;
+				teleportingState = ANIM_STATE_FADING_IN;
+			}
+
+			if (teleportingState == ANIM_STATE_FADING_IN) {
+				if (mySpriteRenderer.color.a < 1) {
+					FadeInStep ();
+				} else {
+					teleportingState = ANIM_STATE_FULLY_VISIBLE;
+				}
+			}
+
+			if (teleportingState == ANIM_STATE_FULLY_VISIBLE) {
+				//you're done
+			}
 		}
-		if (fading == true && fadingIn == true && mySpriteRenderer.color.a < 1) {
-			FadeInStep();
-		}		
 	}
 
 	// Use this for initialization
