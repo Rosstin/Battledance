@@ -27,7 +27,27 @@ public struct Hex
 	public readonly int q;
 	public readonly int r;
 	public readonly int s;
-	
+
+	public override bool Equals(Object obj) 
+	{
+		return obj is Hex && this == (Hex)obj;
+	}
+
+	public static bool operator ==(Hex a, Hex b) 
+	{
+		return a.q == b.q && a.r == b.r && a.s == b.s;
+	}
+
+	public static bool operator !=(Hex x, Hex y) 
+	{
+		return !(x == y);
+	}
+
+	public override int GetHashCode() 
+	{
+		return this.q.GetHashCode() ^ this.r.GetHashCode() ^ this.s.GetHashCode();
+	}
+
 	static public Hex Add(Hex a, Hex b)
 	{
 		return new Hex(a.q + b.q, a.r + b.r, a.s + b.s);

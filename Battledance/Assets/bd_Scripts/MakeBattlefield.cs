@@ -6,10 +6,12 @@ public class MakeBattlefield : MonoBehaviour {
 
 	public GameObject battlespace;
 	public GameObject battlefield;
+	public Dictionary<Hex,GameObject> hexToObj;
 	//public float battlespaceResizeConstant = Constants.BATTLESPACE_RESIZE_CONSTANT; //try not to use this
 
 	// Use this for initialization
 	void Start () {
+		hexToObj = new Dictionary<Hex,GameObject> ();
 		Debug.Log ("draw a hex grid");
 
 		Point gridSize = new Point (Constants.GRID_SPACING, Constants.GRID_SPACING);
@@ -32,6 +34,8 @@ public class MakeBattlefield : MonoBehaviour {
 
 				GameObject newBattlespace = Instantiate (battlespace);
 				newBattlespace.GetComponent<BattlespaceController>().hex = givenHex;
+
+				hexToObj [givenHex] = newBattlespace;
 
 				// put the prisms in an array
 				battlefieldController.battlespaceControllerList.Add (battlespace);

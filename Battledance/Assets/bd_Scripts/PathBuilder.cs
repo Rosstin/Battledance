@@ -6,28 +6,39 @@ public class PathBuilder : MonoBehaviour {
 
 	public GameObject lineToRender;
 	public GameObject player;
+	public GameObject sceneGod;
 
 	LineRenderer myLineRenderer;
+	MakeBattlefield myMakeBattlefield;
 
 	List<GameObject> path = new List<GameObject>();
 
 	// Use this for initialization
 	void Start () {
+		myMakeBattlefield = sceneGod.GetComponent<MakeBattlefield> ();
 		myLineRenderer = lineToRender.GetComponent<LineRenderer>();
 		Instantiate (lineToRender, new Vector3(0,0,0), Quaternion.identity);
 	}
 
 	public void AddPathPoint ( GameObject battlespace ){
-		if(path.Count > 0) {
-			Hex last = path[path.Count-1].GetComponent<BattlespaceController>().hex;
-			Hex newest = battlespace.GetComponent<BattlespaceController>().hex;
+		if (path.Count > 0) {
+			Hex last = path [path.Count - 1].GetComponent<BattlespaceController> ().hex;
+			Hex newest = battlespace.GetComponent<BattlespaceController> ().hex;
+			List<Hex> hexes = PathFinder.findPath (last, newest);
+			for (int i = 1; i < hexes.Count; ++i) {
+				path.Add (myMakeBattlefield.hexToObj [hexes [i]]);
+			}
+			/*
 			int distance = Hex.Distance(newest, last);
+			Debug.Log ("path:" + hexes.Count);
 			Debug.Log ("Distance between" +last.q+","+last.r+","+last.s+" and "+newest.q+","+newest.r+","+newest.s+" = "+distance);
 			if (distance != 1) {
 				return;
 			}
+			*/
+		} else {
+			path.Add (battlespace);
 		}
-		path.Add (battlespace);
 		DrawNewPath ();
 	}
 
