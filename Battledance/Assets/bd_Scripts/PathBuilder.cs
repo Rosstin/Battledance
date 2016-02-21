@@ -39,7 +39,7 @@ public class PathBuilder : MonoBehaviour {
 			GameObject lineEnd = path[path.Count-1];
 
 			myLineRenderer.SetVertexCount(path.Count);
-			for(int i = 0; i < path.Count; i++){
+			for(int i = 0; i < path.Count; i++){ //todo this offset is messy
 				myLineRenderer.SetPosition(i, path[i].transform.position +new Vector3(0,Constants.LINE_LAYER_Y_OFFSET,0));
 			}
 
@@ -55,16 +55,16 @@ public class PathBuilder : MonoBehaviour {
 
 	public void DestroyPath(){
 		//Debug.Log ("Destroy path.");
-		player.GetComponent<CharacterPositionController> ().FadeOut();
 		path = new List<GameObject>();
 	}
 
 	public void ExecutePath(){
-		//Debug.Log ("Execute path!");
+		player.GetComponent<CharacterPositionController> ().TeleportPlayerToThisPosition(path[path.Count-1].transform.position+new Vector3(0,Constants.SPRITE_LAYER_Y_OFFSET,0));
+		Debug.Log ("Execute path! Teleport player to: " + path[path.Count-1].transform.position);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
 }
